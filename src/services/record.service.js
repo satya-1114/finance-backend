@@ -1,9 +1,14 @@
 const prisma = require('../config/prisma');
 
+// Normalize category consistently across create, update, and filters
+const normalizeCategory = (category) =>
+  typeof category === 'string' ? category.toLowerCase().trim() : undefined;
+
 exports.createRecord = async (data, userId) => {
   return prisma.financialRecord.create({
     data: {
       ...data,
+      category: normalizeCategory(data.category),
       userId
     }
   });
@@ -15,13 +20,14 @@ exports.getRecords = async (filters = {}) => {
   return prisma.financialRecord.findMany({
     where: {
       ...(type && { type }),
-      ...(category && { category }),
-      ...(startDate && endDate && {
-        date: {
-          gte: new Date(startDate),
-          lte: new Date(endDate)
-        }
-      })
+      ...(category && { category: normalizeCategory(category) }),
+      ...(startDate &&
+        endDate && {
+          date: {
+            gte: new Date(startDate),
+            lte: new Date(endDate)
+          }
+        })
     },
     orderBy: { date: 'desc' }
   });
@@ -30,7 +36,12 @@ exports.getRecords = async (filters = {}) => {
 exports.updateRecord = async (id, data) => {
   return prisma.financialRecord.update({
     where: { id },
-    data
+    data: {
+      ...data,
+      ...(data.category && {
+        category: normalizeCategory(data.category)
+      })
+    }
   });
 };
 
