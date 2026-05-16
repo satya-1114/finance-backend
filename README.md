@@ -2,19 +2,22 @@
 
 ## 📌 Overview
 
-This backend system is built using Node.js and Express to manage financial records with secure authentication and role-based access control. It allows users to register, log in, and manage income and expense records with proper validation and authorization.
+A secure backend system built using Node.js, Express.js, PostgreSQL, and Prisma ORM to manage financial records with JWT authentication, role-based access control, protected routes, validation, and dashboard analytics.
+
+This system enables users to register, log in, manage financial records (income/expenses), and access analytics based on authorization levels.
 
 ---
 
 ## 🚀 Features
 
 * 🔐 JWT Authentication (Register/Login)
-* 🛡️ Role-Based Access Control (Admin/User)
-* 📊 Financial Records Management (Create Records)
-* 📈 Dashboard API (income, expenses summary)
+* 🛡️ Role-Based Access Control (VIEWER / ANALYST / ADMIN)
+* 📊 Financial Records CRUD Operations
+* 📈 Dashboard Analytics (Category-Based Financial Insights)
 * ✅ Input Validation using Zod
 * ⚠️ Structured Error Handling
 * 🔒 Protected Routes
+* 🧹 Category Normalization for Consistent Data Handling
 
 ---
 
@@ -24,14 +27,14 @@ This backend system is built using Node.js and Express to manage financial recor
 * Express.js
 * PostgreSQL
 * Prisma ORM
-* Zod (Validation)
+* Zod
 * JSON Web Token (JWT)
 
 ---
 
 ## 📂 Project Structure
 
-```
+```bash
 src/
   controllers/
   services/
@@ -45,38 +48,38 @@ prisma/
 
 ## ⚙️ Setup Instructions
 
-### 1. Clone the repository
+### 1. Clone Repository
 
-```
+```bash
 git clone <your-repo-link>
 cd finance-backend
 ```
 
-### 2. Install dependencies
+### 2. Install Dependencies
 
-```
+```bash
 npm install
 ```
 
-### 3. Setup environment variables
+### 3. Configure Environment Variables
 
 Create a `.env` file:
 
-```
+```env
 DATABASE_URL="postgresql://user:password@localhost:5432/finance_db"
 JWT_SECRET="your_secret_key"
 PORT=5000
 ```
 
-### 4. Run migrations
+### 4. Run Prisma Migration
 
-```
+```bash
 npx prisma migrate dev
 ```
 
-### 5. Start server
+### 5. Start Server
 
-```
+```bash
 node server.js
 ```
 
@@ -86,58 +89,65 @@ node server.js
 
 ### Register
 
-POST `/auth/register`
+**POST** `/auth/register`
 
 ### Login
 
-POST `/auth/login`
+**POST** `/auth/login`
 
-Returns JWT token.
+Returns JWT token for authorized access.
 
 ---
 
-## 📊 Records API
+## 📊 Financial Records APIs
 
 ### Create Record
 
-POST `/records`
+**POST** `/records`
 
-Headers:
+### Headers:
 
-```
+```bash
 Authorization: Bearer <token>
 ```
 
-Body:
+### Body:
 
-```
+```json
 {
   "amount": 1000,
   "type": "INCOME",
   "category": "salary",
-  "date": "2026-04-01"
+  "date": "2026-04-01",
+  "notes": "Monthly salary"
 }
 ```
 
 ---
 
-## 📈 Dashboard API
+## 📈 Dashboard APIs
 
-GET `/dashboard`
+### Category Summary
 
-Returns:
+**GET** `/dashboard/category`
 
-* total income
-* total expenses
-* balance
+Returns category-wise grouped financial data.
+
+---
+
+## 👤 Role Access Levels
+
+* **VIEWER** → Limited access
+* **ANALYST** → Financial analysis permissions
+* **ADMIN** → Full system access
 
 ---
 
 ## ❗ Error Handling
 
-All validation errors return:
+Example:
 
-```
+```json
 {
   "success": false,
   "errors": [
@@ -155,8 +165,45 @@ All validation errors return:
 
 Tested using Thunder Client:
 
-* Authentication flow
-* Protected routes
-* Record creation
-* Error validation
+* User Registration
+* User Login
+* JWT Authorization
+* Protected Routes
+* Role-Based Access Control
+* Record Creation
+* Dashboard Analytics
+* Validation Errors
 
+---
+
+## 🔥 Key Learning Outcomes
+
+* Authentication & Authorization
+* Prisma Schema Design
+* PostgreSQL Integration
+* Backend Service Layer Architecture
+* Data Normalization
+* API Security Best Practices
+
+---
+
+## 📸 Suggested Screenshots for GitHub
+
+Add screenshots for:
+
+* Register API Success
+* Login API with JWT Token
+* Protected Record Creation
+* Dashboard Category Analytics
+* Prisma Schema Design
+
+---
+
+## 🚀 Future Improvements
+
+* Swagger API Documentation
+* Refresh Token Authentication
+* Rate Limiting
+* Docker Deployment
+* Unit & Integration Testing
+* Live Deployment (Render / Railway)
